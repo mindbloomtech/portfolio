@@ -1,0 +1,977 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mindbloom Technologies — 3D SaaS Landing</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0b1020;
+            --muted: #9aa6bf;
+            --accent: linear-gradient(90deg, #6ee7b7, #60a5fa);
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: Inter, system-ui, Segoe UI, Arial;
+            background: var(--bg);
+            color: #e6eef8
+        }
+
+        a {
+            color: inherit
+        }
+
+        .model {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 10;
+            padding: 18px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between
+        }
+
+        .logo {
+            font-weight: 900;
+            letter-spacing: 0.4px;
+            font-size: 24px;
+            background: var(--accent);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent
+        }
+
+        nav a {
+            margin-left: 32px;
+            font-weight: 600;
+            color: var(--muted);
+            text-decoration: none;
+            transition: color 0.2s;
+            position: relative
+        }
+
+        nav a:hover {
+            color: white
+        }
+
+        nav a:hover::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: -4px;
+            height: 2px;
+            background: var(--accent)
+        }
+
+        main {
+            position: relative;
+            z-index: 5
+        }
+
+        section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 120px 8vw
+        }
+
+        .hero {
+            display: flex;
+            flex-direction: row;
+            gap: 60px
+        }
+
+        .hero-left {
+            flex: 1;
+            max-width: 720px
+        }
+
+        .eyebrow {
+            font-weight: 600;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 1px
+        }
+
+        h1,
+        h2,
+        h3 {
+            margin: 0
+        }
+
+        h1 {
+            font-size: clamp(36px, 6vw, 64px);
+            line-height: 1.02;
+            margin: 18px 0
+        }
+
+        p.lead {
+            color: var(--muted);
+            font-size: 18px;
+            max-width: 540px
+        }
+
+        .cta {
+            margin-top: 28px;
+            display: flex;
+            gap: 12px
+        }
+
+        .btn {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 12px 18px;
+            border-radius: 10px;
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600
+        }
+
+        .btn.primary {
+            background: linear-gradient(90deg, #6ee7b7 0%, #60a5fa 100%);
+            color: #071025;
+            border: none
+        }
+
+        .services,
+        .testimonials,
+        .pricing,
+        .faq,
+        .team {
+            flex-direction: column
+        }
+
+        .testimonial-grid,
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 28px;
+            margin-top: 36px;
+            width: 100%;
+        }
+
+        .service-grid {
+            display: flex;
+            flex-direction: row;
+            gap: 28px;
+            margin-top: 36px;
+            width: 100%;
+            justify-content: center;
+            align-items: stretch;
+            flex-wrap: nowrap;
+        }
+
+        @media (max-width: 900px) {
+            .service-grid {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+
+        .pricing-grid {
+            display: flex;
+            flex-direction: row;
+            gap: 28px;
+            margin-top: 36px;
+            width: 100%;
+            justify-content: center;
+            align-items: stretch;
+        }
+
+        @media (max-width: 900px) {
+            .pricing-grid {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+
+        .card {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+            padding: 36px 28px;
+            border-radius: 18px;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 8px 40px rgba(2, 6, 23, 0.7);
+            font-size: 1.15rem;
+            width: 100%;
+            height: auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+        }
+
+        .card h3 {
+            margin: 0 0 8px 0
+        }
+
+        .card p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 14px
+        }
+
+        .about-grid,
+        .team-grid {
+            display: flex;
+            gap: 40px;
+            align-items: center
+        }
+
+        .about-copy {
+            max-width: 740px;
+            font-size: 1.25rem;
+        }
+
+        .about-copy h2 {
+            font-size: 2.4rem;
+        }
+
+        .about-copy p {
+            font-size: 1.15rem;
+        }
+
+        footer {
+            padding: 40px 8vw;
+            background: transparent;
+            color: var(--muted);
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap
+        }
+
+        @media (max-width:900px) {
+            .hero {
+                flex-direction: column
+            }
+
+            header {
+                padding: 12px 18px
+            }
+
+            section {
+                padding: 100px 6vw
+            }
+        }
+
+        .muted {
+            color: var(--muted)
+        }
+
+        .star-rating {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 16px;
+        }
+
+        .star-rating svg {
+            width: 24px;
+            height: 24px;
+            filter: drop-shadow(0 2px 4px rgba(110, 231, 183, 0.2));
+        }
+
+        .star-rating svg path {
+            fill: url(#star-gradient);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="model" id="model"></div>
+    <header>
+        <div class="logo">Mindbloom Technologies<span style="color:#6ee7b7"></span></div>
+        <nav>
+            <a href="#home">Home</a>
+            <a href="#services">Services</a>
+            <a href="#about">About</a>
+            <a href="#testimonials">Testimonials</a>
+            <a href="#pricing">Pricing</a>
+            <a href="#team">Team</a>
+            <a href="#contact">Contact</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero" id="home">
+            <div class="hero-left">
+                <div class="eyebrow">Enterprise Software • Cloud • AI</div>
+                <h1 id="hero-title">Empowering businesses with next‑gen software and AI</h1>
+                <p class="lead">We design, build, and operate resilient software systems — cloud-native platforms, AI
+                    integrations, and automation pipelines that scale with your business.</p>
+                <div class="cta">
+                    <a class="btn primary" href="#contact">Get a Proposal</a>
+                    <a class="btn" href="#services">Our Services</a>
+                </div>
+            </div>
+            <div class="hero-right" style="flex:1;min-height:360px;"></div>
+        </section>
+
+        <section class="services" id="services">
+            <div>
+                <div class="eyebrow">What we do</div>
+                <h2 style="margin-top:6px">Services tailored for growth</h2>
+                <div class="service-grid">
+                    <div class="card" style="flex: 1;">
+                        <div style="margin-bottom:16px;">
+                            <svg width="48" height="48" viewBox="0 0 48 48" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M24 12C31.732 12 38 18.268 38 26C38 33.732 31.732 40 24 40C16.268 40 10 33.732 10 26C10 18.268 16.268 12 24 12ZM24 8C14.059 8 6 16.059 6 26C6 35.941 14.059 44 24 44C33.941 44 42 35.941 42 26C42 16.059 33.941 8 24 8Z"
+                                    fill="url(#cloud-gradient)" />
+                                <path
+                                    d="M24 16C29.523 16 34 20.477 34 26C34 31.523 29.523 36 24 36C18.477 36 14 31.523 14 26C14 20.477 18.477 16 24 16Z"
+                                    fill="url(#cloud-gradient)" />
+                                <defs>
+                                    <linearGradient id="cloud-gradient" x1="6" y1="8" x2="42" y2="44"
+                                        gradientUnits="userSpaceOnUse">
+                                        <stop stop-color="#6ee7b7" />
+                                        <stop offset="1" stop-color="#60a5fa" />
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                        </div>
+                        <h3>Cloud & Platform Engineering</h3>
+                        <p class="muted" style="margin-bottom:16px">Design, migrate and operate secure cloud platforms
+                            with cost-aware architectures.</p>
+                        <ul style="color:var(--muted);font-size:0.9rem;margin:0;padding-left:20px;list-style:none;">
+                            <li style="margin-bottom:8px">• AWS, Azure & GCP expertise</li>
+                            <li style="margin-bottom:8px">• Microservices architecture</li>
+                            <li style="margin-bottom:8px">• Kubernetes orchestration</li>
+                            <li>• Security & compliance</li>
+                        </ul>
+                    </div>
+                    <div class="card" style="flex: 1;">
+                        <div style="margin-bottom:16px;">
+                            <svg width="48" height="48" viewBox="0 0 48 48" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M24 6C26.2091 6 28 7.79086 28 10V14C28 16.2091 26.2091 18 24 18C21.7909 18 20 16.2091 20 14V10C20 7.79086 21.7909 6 24 6Z"
+                                    fill="url(#ai-gradient)" />
+                                <path
+                                    d="M38 24C38 26.2091 36.2091 28 34 28H30C27.7909 28 26 26.2091 26 24C26 21.7909 27.7909 20 30 20H34C36.2091 20 38 21.7909 38 24Z"
+                                    fill="url(#ai-gradient)" />
+                                <path
+                                    d="M24 30C26.2091 30 28 31.7909 28 34V38C28 40.2091 26.2091 42 24 42C21.7909 42 20 40.2091 20 38V34C20 31.7909 21.7909 30 24 30Z"
+                                    fill="url(#ai-gradient)" />
+                                <path
+                                    d="M14 20H18C20.2091 20 22 21.7909 22 24C22 26.2091 20.2091 28 18 28H14C11.7909 28 10 26.2091 10 24C10 21.7909 11.7909 20 14 20Z"
+                                    fill="url(#ai-gradient)" />
+                                <defs>
+                                    <linearGradient id="ai-gradient" x1="10" y1="6" x2="38" y2="42"
+                                        gradientUnits="userSpaceOnUse">
+                                        <stop stop-color="#6ee7b7" />
+                                        <stop offset="1" stop-color="#60a5fa" />
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                        </div>
+                        <h3>AI & Data Solutions</h3>
+                        <p class="muted" style="margin-bottom:16px">Integrate ML models, analytics pipelines and
+                            automation into your product stack.</p>
+                        <ul style="color:var(--muted);font-size:0.9rem;margin:0;padding-left:20px;list-style:none;">
+                            <li style="margin-bottom:8px">• Custom ML models</li>
+                            <li style="margin-bottom:8px">• NLP & Computer Vision</li>
+                            <li style="margin-bottom:8px">• Real-time analytics</li>
+                            <li>• AI-powered automation</li>
+                        </ul>
+                    </div>
+                    <div class="card" style="flex: 1;">
+                        <div style="margin-bottom:16px;">
+                            <svg width="48" height="48" viewBox="0 0 48 48" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M24 4L35.2583 10V22L24 28L12.7417 22V10L24 4Z" fill="url(#devops-gradient)" />
+                                <path d="M24 28V40M35.2583 22L44 28V40L35.2583 46M12.7417 22L4 28V40L12.7417 46"
+                                    stroke="url(#devops-gradient)" stroke-width="2" />
+                                <defs>
+                                    <linearGradient id="devops-gradient" x1="4" y1="4" x2="44" y2="46"
+                                        gradientUnits="userSpaceOnUse">
+                                        <stop stop-color="#6ee7b7" />
+                                        <stop offset="1" stop-color="#60a5fa" />
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                        </div>
+                        <h3>DevOps & SRE</h3>
+                        <p class="muted" style="margin-bottom:16px">Build CI/CD, observability, and reliability
+                            practices that reduce lead time and incidents.</p>
+                        <ul style="color:var(--muted);font-size:0.9rem;margin:0;padding-left:20px;list-style:none;">
+                            <li style="margin-bottom:8px">• Automated pipelines</li>
+                            <li style="margin-bottom:8px">• Infrastructure as Code</li>
+                            <li style="margin-bottom:8px">• 24/7 monitoring</li>
+                            <li>• Incident response</li>
+                        </ul>
+                    </div>
+                    <div class="card" style="flex: 1;">
+                        <div style="margin-bottom:16px;">
+                            <svg width="48" height="48" viewBox="0 0 48 48" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M24 6L38 14V34L24 42L10 34V14L24 6Z" fill="url(#product-gradient)" />
+                                <path d="M24 22L31 26V34L24 38L17 34V26L24 22Z" fill="#071025" />
+                                <path d="M24 6V14M38 14L24 22M24 22L10 14M24 22V42" stroke="url(#product-gradient)"
+                                    stroke-width="2" />
+                                <defs>
+                                    <linearGradient id="product-gradient" x1="10" y1="6" x2="38" y2="42"
+                                        gradientUnits="userSpaceOnUse">
+                                        <stop stop-color="#6ee7b7" />
+                                        <stop offset="1" stop-color="#60a5fa" />
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                        </div>
+                        <h3>Custom Product Development</h3>
+                        <p class="muted" style="margin-bottom:16px">From MVP to scale — full‑stack product engineering
+                            and UX for complex domains.</p>
+                        <ul style="color:var(--muted);font-size:0.9rem;margin:0;padding-left:20px;list-style:none;">
+                            <li style="margin-bottom:8px">• Full-stack development</li>
+                            <li style="margin-bottom:8px">• Modern UI/UX design</li>
+                            <li style="margin-bottom:8px">• API development</li>
+                            <li>• Performance optimization</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="testimonials" id="testimonials">
+            <svg width="0" height="0">
+                <defs>
+                    <linearGradient id="star-gradient" x1="2" y1="2" x2="22" y2="21.02" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#6ee7b7" />
+                        <stop offset="1" stop-color="#60a5fa" />
+                    </linearGradient>
+                </defs>
+            </svg>
+            <div>
+                <div class="eyebrow">What our clients say</div>
+                <h2 style="margin-top:6px">Trusted by innovators</h2>
+                <div class="testimonial-grid">
+                    <div class="card">
+                        <div class="star-rating">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
+                                    fill="url(#star-gradient1)" />
+                            </svg>
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
+                                    fill="url(#star-gradient1)" />
+                            </svg>
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
+                                    fill="url(#star-gradient1)" />
+                            </svg>
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
+                                    fill="url(#star-gradient1)" />
+                            </svg>
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
+                                    fill="url(#star-gradient1)" />
+                            </svg>
+                        </div>
+                        <p class="muted" style="font-size:1.1rem;line-height:1.6;margin-bottom:20px">"Mindbloom
+                            transformed our cloud infrastructure and reduced deployment times by 70%. Their expertise in
+                            DevOps and cloud architecture has been instrumental in scaling our platform."</p>
+                        <div style="display:flex;align-items:center;gap:12px;">
+                            <div
+                                style="width:48px;height:48px;border-radius:50%;background:linear-gradient(45deg,#6ee7b7,#60a5fa);display:flex;align-items:center;justify-content:center;font-weight:bold;color:#071025;">
+                                RS</div>
+                            <div>
+                                <h3 style="margin:0">Robert Smith</h3>
+                                <p class="muted" style="margin:4px 0 0">TechLead, FinTech Startup</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="star-rating">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
+                                    fill="url(#star-gradient2)" />
+                            </svg>
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
+                                    fill="url(#star-gradient2)" />
+                            </svg>
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
+                                    fill="url(#star-gradient2)" />
+                            </svg>
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
+                                    fill="url(#star-gradient2)" />
+                            </svg>
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
+                                    fill="url(#star-gradient2)" />
+                            </svg>
+                        </div>
+                        <p class="muted" style="font-size:1.1rem;line-height:1.6;margin-bottom:20px">"Their AI solutions
+                            helped us automate critical healthcare processes with 99.9% accuracy. The team's
+                            understanding of both technology and healthcare compliance was exceptional."</p>
+                        <div style="display:flex;align-items:center;gap:12px;">
+                            <div
+                                style="width:48px;height:48px;border-radius:50%;background:linear-gradient(45deg,#6ee7b7,#60a5fa);display:flex;align-items:center;justify-content:center;font-weight:bold;color:#071025;">
+                                AJ</div>
+                            <div>
+                                <h3 style="margin:0">Amy Johnson</h3>
+                                <p class="muted" style="margin:4px 0 0">CTO, Healthcare SaaS</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="star-rating">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
+                                    fill="url(#star-gradient3)" />
+                            </svg>
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
+                                    fill="url(#star-gradient3)" />
+                            </svg>
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
+                                    fill="url(#star-gradient3)" />
+                            </svg>
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
+                                    fill="url(#star-gradient3)" />
+                            </svg>
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
+                                    fill="url(#star-gradient3)" />
+                            </svg>
+                        </div>
+                        <p class="muted" style="font-size:1.1rem;line-height:1.6;margin-bottom:20px">"Mindbloom's custom
+                            development team delivered our MVP in record time. Their agile approach and technical
+                            excellence exceeded our expectations."</p>
+                        <div style="display:flex;align-items:center;gap:12px;">
+                            <div
+                                style="width:48px;height:48px;border-radius:50%;background:linear-gradient(45deg,#6ee7b7,#60a5fa);display:flex;align-items:center;justify-content:center;font-weight:bold;color:#071025;">
+                                MK</div>
+                            <div>
+                                <h3 style="margin:0">Mike Khan</h3>
+                                <p class="muted" style="margin:4px 0 0">Founder, E-commerce Platform</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="pricing" id="pricing">
+            <svg width="0" height="0">
+                <defs>
+                    <linearGradient id="pricing-gradient1" x1="4" y1="4" x2="28" y2="28" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#6ee7b7" />
+                        <stop offset="1" stop-color="#60a5fa" />
+                    </linearGradient>
+                    <linearGradient id="pricing-gradient2" x1="4" y1="4" x2="28" y2="28" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#6ee7b7" />
+                        <stop offset="1" stop-color="#60a5fa" />
+                    </linearGradient>
+                    <linearGradient id="pricing-gradient3" x1="4" y1="4" x2="28" y2="28" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#6ee7b7" />
+                        <stop offset="1" stop-color="#60a5fa" />
+                    </linearGradient>
+                </defs>
+            </svg>
+            <div>
+                <div class="eyebrow">Flexible Plans</div>
+                <h2 style="margin-top:6px">Pricing that scales with you</h2>
+                <div class="pricing-grid">
+                    <div class="card">
+                        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M16 4L28 10V22L16 28L4 22V10L16 4Z" fill="url(#pricing-gradient1)"
+                                    fill-opacity="0.1" stroke="url(#pricing-gradient1)" stroke-width="2" />
+                                <text x="16" y="20" text-anchor="middle" fill="url(#pricing-gradient1)"
+                                    style="font-size:12px;font-weight:600;font-family:Inter,system-ui;">S</text>
+                            </svg>
+                            <span
+                                style="font-size:1.2rem;font-weight:600;background:linear-gradient(90deg,#6ee7b7,#60a5fa);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;">Starter</span>
+                        </div>
+                        <h3 style="font-size:2.2rem;margin:16px 0;">$99<span
+                                style="font-size:1rem;color:var(--muted)">/month</span></h3>
+                        <p class="muted" style="margin-bottom:24px">Perfect for small teams starting their cloud journey
+                        </p>
+                        <ul
+                            style="color:var(--muted);font-size:0.95rem;margin:0 0 24px;padding-left:20px;list-style:none;">
+                            <li style="margin-bottom:12px">✓ Basic cloud infrastructure setup</li>
+                            <li style="margin-bottom:12px">✓ 1 AI model deployment</li>
+                            <li style="margin-bottom:12px">✓ 8/5 support</li>
+                            <li style="margin-bottom:12px">✓ Basic monitoring</li>
+                            <li>✓ Monthly reporting</li>
+                        </ul>
+                        <button class="btn primary"
+                            style="width:100%;padding:16px;font-size:1.1rem;transition:transform 0.2s,box-shadow 0.2s;position:relative;overflow:hidden;">
+                            <span style="position:relative;z-index:1">Get Started</span>
+                            <div
+                                style="position:absolute;inset:0;background:linear-gradient(90deg,#60a5fa,#6ee7b7);opacity:0;transition:opacity 0.2s;">
+                            </div>
+                        </button>
+                        <style>
+                            .btn.primary:hover {
+                                transform: translateY(-2px);
+                                box-shadow: 0 8px 30px rgba(110, 231, 183, 0.2);
+                            }
+
+                            .btn.primary:hover div {
+                                opacity: 1;
+                            }
+                        </style>
+                    </div>
+                    <div class="card"
+                        style="background:linear-gradient(180deg,rgba(110,231,183,0.08),rgba(96,165,250,0.08));border:1px solid rgba(110,231,183,0.1);">
+                        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M16 4L28 10V22L16 28L4 22V10L16 4Z" fill="url(#pricing-gradient2)"
+                                    fill-opacity="0.15" stroke="url(#pricing-gradient2)" stroke-width="2" />
+                                <text x="16" y="20" text-anchor="middle" fill="url(#pricing-gradient2)"
+                                    style="font-size:12px;font-weight:600;font-family:Inter,system-ui;">P</text>
+                            </svg>
+                            <span
+                                style="font-size:1.2rem;font-weight:600;background:linear-gradient(90deg,#6ee7b7,#60a5fa);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;">Professional</span>
+                        </div>
+                        <h3 style="font-size:2.2rem;margin:16px 0;">$299<span
+                                style="font-size:1rem;color:var(--muted)">/month</span></h3>
+                        <p class="muted" style="margin-bottom:24px">Advanced features for growing businesses</p>
+                        <ul
+                            style="color:var(--muted);font-size:0.95rem;margin:0 0 24px;padding-left:20px;list-style:none;">
+                            <li style="margin-bottom:12px">✓ Advanced cloud architecture</li>
+                            <li style="margin-bottom:12px">✓ 3 AI model deployments</li>
+                            <li style="margin-bottom:12px">✓ 24/7 priority support</li>
+                            <li style="margin-bottom:12px">✓ Advanced monitoring & alerts</li>
+                            <li>✓ Weekly reporting & insights</li>
+                        </ul>
+                        <button class="btn primary"
+                            style="width:100%;padding:16px;font-size:1.1rem;transition:transform 0.2s,box-shadow 0.2s;position:relative;overflow:hidden;">
+                            <span style="position:relative;z-index:1">Get Started</span>
+                            <div
+                                style="position:absolute;inset:0;background:linear-gradient(90deg,#60a5fa,#6ee7b7);opacity:0;transition:opacity 0.2s;">
+                            </div>
+                        </button>
+                    </div>
+                    <div class="card">
+                        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M16 4L28 10V22L16 28L4 22V10L16 4Z" fill="url(#pricing-gradient3)"
+                                    fill-opacity="0.1" stroke="url(#pricing-gradient3)" stroke-width="2" />
+                                <text x="16" y="20" text-anchor="middle" fill="url(#pricing-gradient3)"
+                                    style="font-size:12px;font-weight:600;font-family:Inter,system-ui;">E</text>
+                            </svg>
+                            <span
+                                style="font-size:1.2rem;font-weight:600;background:linear-gradient(90deg,#6ee7b7,#60a5fa);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;">Enterprise</span>
+                        </div>
+                        <h3 style="font-size:2.2rem;margin:16px 0;">Custom<span
+                                style="font-size:1rem;color:var(--muted)"> pricing</span></h3>
+                        <p class="muted" style="margin-bottom:24px">Tailored solutions for large organizations</p>
+                        <ul
+                            style="color:var(--muted);font-size:0.95rem;margin:0 0 24px;padding-left:20px;list-style:none;">
+                            <li style="margin-bottom:12px">✓ Custom cloud architecture</li>
+                            <li style="margin-bottom:12px">✓ Unlimited AI deployments</li>
+                            <li style="margin-bottom:12px">✓ 24/7 dedicated support</li>
+                            <li style="margin-bottom:12px">✓ Custom monitoring solutions</li>
+                            <li>✓ Real-time analytics & reporting</li>
+                        </ul>
+                        <button class="btn primary"
+                            style="width:100%;padding:16px;font-size:1.1rem;transition:transform 0.2s,box-shadow 0.2s;position:relative;overflow:hidden;">
+                            <span style="position:relative;z-index:1">Contact Sales</span>
+                            <div
+                                style="position:absolute;inset:0;background:linear-gradient(90deg,#60a5fa,#6ee7b7);opacity:0;transition:opacity 0.2s;">
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="about" id="about">
+            <div class="about-grid">
+                <div class="about-copy">
+                    <div class="eyebrow">About Mindbloom</div>
+                    <h2 id="about-title">We partner with teams to ship reliable software — fast</h2>
+                    <p class="muted">Founded by engineers who build systems at scale, Mindbloom focuses on pragmatic
+                        architecture, strong delivery cadence, and tangible business outcomes.</p>
+                    <p style="margin-top:18px" class="muted">Trusted by startups and enterprises across e‑commerce,
+                        fintech, and healthcare.</p>
+                </div>
+                <div style="flex:1"></div>
+            </div>
+        </section>
+
+        <section class="team" id="team">
+            <div>
+                <div class="eyebrow">Meet the team</div>
+                <h2 style="margin-top:6px">Engineers and innovators behind Mindbloom</h2>
+                <div class="team-grid">
+                    <div class="card">
+                        <h3>Jane Doe</h3>
+                        <p class="muted">CEO & Co-founder</p>
+                    </div>
+                    <div class="card">
+                        <h3>John Smith</h3>
+                        <p class="muted">CTO & Co-founder</p>
+                    </div>
+                    <div class="card">
+                        <h3>Emily Clark</h3>
+                        <p class="muted">Head of AI</p>
+                    </div>
+                    <div class="card">
+                        <h3>Michael Brown</h3>
+                        <p class="muted">Lead DevOps Engineer</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="contact" id="contact-form" style="min-height:auto;padding-bottom:80px;">
+            <div style="display:flex;gap:60px;align-items:flex-start;flex-wrap:wrap;">
+                <div style="flex:1;min-width:320px;max-width:600px;">
+                    <div class="eyebrow">Get in Touch</div>
+                    <h2 style="margin-top:6px">Start your project with us</h2>
+                    <div style="max-width:600px;margin:36px 0;">
+                        <form id="contact-form" style="display:flex;flex-direction:column;gap:20px;">
+                            <div style="display:flex;gap:20px;flex-wrap:wrap;">
+                                <input type="text" id="name" name="name" placeholder="Your Name" required
+                                    style="flex:1;min-width:250px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);padding:14px;border-radius:10px;color:white;">
+                                <input type="email" id="email" name="email" placeholder="Your Email" required
+                                    style="flex:1;min-width:250px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);padding:14px;border-radius:10px;color:white;">
+                            </div>
+                            <input type="text" id="subject" name="subject" placeholder="Subject" required
+                                style="width:100%;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);padding:14px;border-radius:10px;color:white;">
+                            <textarea id="message" name="message" placeholder="Your Message" required rows="5"
+                                style="width:100%;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.1);padding:14px;border-radius:10px;color:white;resize:vertical;"></textarea>
+                            <button type="submit" class="btn primary" style="width:fit-content;padding:14px 32px;">Send
+                                Message</button>
+                        </form>
+                    </div>
+                </div>
+                <div
+                    style="flex:1;min-width:520px;max-width:1080px;background:linear-gradient(180deg,rgba(110,231,183,0.08),rgba(96,165,250,0.08));border-radius:18px;padding:38px 32px;box-shadow:0 4px 32px rgba(2,6,23,0.18);margin-top:36px;">
+                    <h3 style="font-size:2rem;margin-bottom:18px;line-height:1.2;">Let’s Build Something Remarkable
+                        Together</h3>
+                    <p style="font-size:1.15rem;color:var(--muted);margin-bottom:18px;">Have a vision, challenge, or
+                        idea? We turn ambitious concepts into real, scalable solutions. Whether you’re a startup or an
+                        enterprise, your next big leap starts with a simple message.</p>
+                    <ul style="color:var(--muted);font-size:1.08rem;line-height:1.7;margin:0 0 18px 18px;padding:0;">
+                        <li>Free expert consultation—no strings attached</li>
+                        <li>100% confidential & secure</li>
+                        <li>Actionable advice for your unique needs</li>
+                    </ul>
+                    <p style="font-size:1.13rem;color:#76eab4;font-weight:600;margin-top:18px;">Let’s make your vision a
+                        reality. Reach out now!</p>
+                </div>
+            </div>
+        </section>
+
+        <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+        <script>
+            (function () {
+                // Initialize EmailJS with public key from environment variable
+                emailjs.init(process.env.EMAILJS_PUBLIC_KEY);
+
+                document.getElementById('contact-form').addEventListener('submit', function (event) {
+                    event.preventDefault();
+
+                    const btn = event.target.querySelector('button');
+                    const originalText = btn.innerHTML;
+                    btn.innerHTML = 'Sending...';
+                    btn.disabled = true;
+
+                    const templateParams = {
+                        title: document.getElementById('subject').value,
+                        name: document.getElementById('name').value,
+                        email: document.getElementById('email').value,
+                        message: document.getElementById('message').value
+                    };
+
+                    emailjs.send(process.env.EMAILJS_SERVICE_ID, process.env.EMAILJS_TEMPLATE_ID, templateParams, process.env.EMAILJS_PUBLIC_KEY)
+                        .then(function () {
+                            alert('Thank you! Your message has been sent.');
+                            event.target.reset();
+                        }, function (error) {
+                            alert('Sorry, there was an error. Please try again later.');
+                            console.error('EmailJS error:', error);
+                        })
+                        .finally(() => {
+                            btn.innerHTML = originalText;
+                            btn.disabled = false;
+                        });
+                });
+            })();
+        </script>
+
+        <footer id="contact">
+            <div style="display:flex;flex-direction:column;gap:10px;min-width:220px;">
+                <strong>Contact</strong>
+                <div class="muted" style="margin-top:8px">mindbloomtech@gmail.com<br>+91 987654321</div>
+                <div class="muted" style="margin-top:8px">Aaimalai, Pollachi<br>Tamil Nadu, India</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:10px;min-width:180px;">
+                <strong>Quick Links</strong>
+                <a href="#services" class="muted" style ="text-decoration: none;">Services</a>
+                <a href="#about" class="muted" style ="text-decoration: none;">About</a>
+                <a href="#pricing" class="muted" style ="text-decoration: none;">Pricing</a>
+                <a href="#team" class="muted" style ="text-decoration: none;">Team</a>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:10px;min-width:180px;">
+                <strong>Follow Us</strong>
+                <div style="display:flex;gap:12px;align-items:center;">
+                    <a href="https://linkedin.com/company/mindbloom" target="_blank" title="LinkedIn" class="muted"
+                        style="display:inline-flex;align-items:center;">
+                        <svg width="26" height="26" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"
+                            aria-label="LinkedIn">
+                            <rect width="32" height="32" rx="6" fill="#0077B5" />
+                            <path
+                                d="M10.666 13.333h2.667v8h-2.667v-8zm1.333-4a1.333 1.333 0 110 2.667 1.333 1.333 0 010-2.667zm3.334 4h2.56v1.093h.037c.357-.677 1.23-1.393 2.533-1.393 2.707 0 3.2 1.787 3.2 4.107v4.193h-2.667v-3.72c0-.887-.016-2.027-1.28-2.027-1.28 0-1.48.96-1.48 1.953v3.794h-2.667v-8z"
+                                fill="#fff" />
+                        </svg>
+                    </a>
+                    <a href="https://twitter.com/mindbloom" target="_blank" title="Twitter" class="muted"
+                        style="display:inline-flex;align-items:center;">
+                        <svg width="26" height="26" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"
+                            aria-label="Twitter">
+                            <rect width="32" height="32" rx="6" fill="#1DA1F2" />
+                            <path
+                                d="M25.6 11.547a6.4 6.4 0 01-1.84.507 3.2 3.2 0 001.413-1.76 6.4 6.4 0 01-2.027.773 3.2 3.2 0 00-5.44 2.92A9.067 9.067 0 019.067 10.4a3.2 3.2 0 00.987 4.267 3.2 3.2 0 01-1.453-.4v.04a3.2 3.2 0 002.56 3.133 3.2 3.2 0 01-1.453.053 3.2 3.2 0 002.987 2.227A6.427 6.427 0 018 22.027a9.067 9.067 0 004.907 1.44c5.893 0 9.12-4.88 9.12-9.12 0-.14-.003-.28-.01-.42a6.507 6.507 0 001.6-1.68z"
+                                fill="#fff" />
+                        </svg>
+                    </a>
+                    <a href="https://github.com/mindbloom" target="_blank" title="GitHub" class="muted"
+                        style="display:inline-flex;align-items:center;">
+                        <svg width="26" height="26" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"
+                            aria-label="GitHub">
+                            <rect width="32" height="32" rx="6" fill="#181717" />
+                            <path
+                                d="M16 7.333c-4.72 0-8.547 3.827-8.547 8.547 0 3.78 2.453 6.987 5.853 8.12.427.08.573-.187.573-.413 0-.2-.007-.72-.013-1.413-2.38.52-2.88-1.147-2.88-1.147-.387-.987-.947-1.253-.947-1.253-.773-.527.06-.52.06-.52.853.06 1.307.88 1.307.88.76 1.307 1.987.933 2.473.713.08-.547.293-.933.533-1.147-1.9-.213-3.893-.953-3.893-4.24 0-.933.333-1.693.88-2.287-.087-.213-.38-1.067.08-2.227 0 0 .713-.227 2.333.88a8.08 8.08 0 012.12-.287c.72.003 1.453.097 2.12.287 1.62-1.107 2.333-.88 2.333-.88.46 1.16.167 2.014.08 2.227.547.594.88 1.354.88 2.287 0 3.293-1.993 4.023-3.893 4.24.3.26.567.773.567 1.56 0 1.127-.013 2.04-.013 2.32 0 .227.147.497.58.413 3.4-1.133 5.853-4.34 5.853-8.12 0-4.72-3.827-8.547-8.547-8.547z"
+                                fill="#fff" />
+                        </svg>
+                    </a>
+                    <a href="https://instagram.com/mindbloom" target="_blank" title="Instagram" class="muted"
+                        style="display:inline-flex;align-items:center;">
+                        <svg width="26" height="26" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"
+                            aria-label="Instagram">
+                            <rect width="32" height="32" rx="6" fill="#E1306C" />
+                            <g>
+                                <rect x="9" y="9" width="14" height="14" rx="5" stroke="#fff" stroke-width="2"
+                                    fill="none" />
+                                <circle cx="16" cy="16" r="4" stroke="#fff" stroke-width="2" fill="none" />
+                                <circle cx="21.2" cy="10.8" r="1.2" fill="#fff" />
+                            </g>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            <div class="muted" style="flex:1;text-align:right;align-self:flex-end;min-width:200px;">© Mindbloom
+                Technologies — 2025<br><span style="font-size:0.95em;">All rights reserved.</span></div>
+        </footer>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.32/dist/lenis.min.js"></script>
+    <script src="https://unpkg.com/three@0.156.0/build/three.min.js"></script>
+    <script>
+        const lenis = new Lenis({ duration: 1.1, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
+        function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+        requestAnimationFrame(raf);
+        gsap.registerPlugin(ScrollTrigger);
+        lenis.on('scroll', ScrollTrigger.update);
+
+        const container = document.getElementById('model');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(45, innerWidth / innerHeight, 0.1, 1000);
+        camera.position.set(0, 0, 6);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(innerWidth, innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.outputEncoding = THREE.sRGBEncoding;
+        container.appendChild(renderer.domElement);
+
+        const amb = new THREE.AmbientLight(0xffffff, 0.6); scene.add(amb);
+        const dir = new THREE.DirectionalLight(0xffffff, 0.8); dir.position.set(5, 5, 5); scene.add(dir);
+        const hemi = new THREE.HemisphereLight(0x6eebc0, 0x10203a, 0.2); scene.add(hemi);
+
+        const orbGeo = new THREE.IcosahedronGeometry(1.6, 4);
+        const orbMat = new THREE.MeshStandardMaterial({ color: 0x60a5fa, metalness: 0.9, roughness: 0.2, emissive: 0x001022, emissiveIntensity: 0.3 });
+        const orb = new THREE.Mesh(orbGeo, orbMat); orb.castShadow = orb.receiveShadow = true;
+        scene.add(orb);
+
+        const particleCount = 3000;
+        const particlesGeo = new THREE.BufferGeometry();
+        const positions = new Float32Array(particleCount * 3);
+        for (let i = 0; i < particleCount * 3; i++) positions[i] = (Math.random() - 0.5) * 15;
+        particlesGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        const particlesMat = new THREE.PointsMaterial({ color: 0x6ee7b7, size: 0.03 });
+        const particles = new THREE.Points(particlesGeo, particlesMat);
+        scene.add(particles);
+
+        window.addEventListener('resize', () => { camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight); });
+
+        let t1 = 0;
+        let scrollProgress = 0;
+
+        function animate() {
+            requestAnimationFrame(animate);
+            t1 += 0.01;
+            orb.position.y = Math.sin(t1) * 0.12;
+            orb.rotation.x += 0.002 + scrollProgress * 0.02;
+            orb.rotation.y += 0.004 + scrollProgress * 0.03;
+            particles.rotation.y += 0.001;
+            renderer.render(scene, camera);
+        }
+
+        ScrollTrigger.create({ start: 0, end: 'max', onUpdate: self => { scrollProgress = self.progress; } });
+        animate();
+
+        window.addEventListener('load', () => {
+            if (typeof SplitType !== 'undefined') {
+                const st = new SplitType('#hero-title', { types: 'lines, words' });
+                gsap.from(st.lines, { y: 70, opacity: 0, stagger: 0.08, duration: 0.9, ease: 'power3.out' });
+                const aboutSplit = new SplitType('#about-title', { types: 'lines, words' });
+                gsap.from(aboutSplit.lines, { y: 60, opacity: 0, stagger: 0.09, duration: 0.9, scrollTrigger: { trigger: '#about', start: 'top 65%' } });
+            }
+        });
+
+        gsap.from('.card', { y: 30, opacity: 0, stagger: 0.12, duration: 0.9, scrollTrigger: { trigger: '#services', start: 'top 75%' } });
+    </script>
+</body>
+</html>
