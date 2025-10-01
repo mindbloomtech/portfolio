@@ -804,8 +804,7 @@
         <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
         <script>
             (function () {
-                // Initialize EmailJS with public key from environment variable
-                emailjs.init(process.env.EMAILJS_PUBLIC_KEY);
+                emailjs.init("GNtYY121XcZS2_Ki_"); // EmailJS public key
 
                 document.getElementById('contact-form').addEventListener('submit', function (event) {
                     event.preventDefault();
@@ -822,7 +821,7 @@
                         message: document.getElementById('message').value
                     };
 
-                    emailjs.send(process.env.EMAILJS_SERVICE_ID, process.env.EMAILJS_TEMPLATE_ID, templateParams, process.env.EMAILJS_PUBLIC_KEY)
+                    emailjs.send('service_0lbp3hd', 'template_n2skp6d', templateParams, 'GNtYY121XcZS2_Ki_')
                         .then(function () {
                             alert('Thank you! Your message has been sent.');
                             event.target.reset();
@@ -842,7 +841,7 @@
             <div style="display:flex;flex-direction:column;gap:10px;min-width:220px;">
                 <strong>Contact</strong>
                 <div class="muted" style="margin-top:8px">mindbloomtech@gmail.com<br>+91 987654321</div>
-                <div class="muted" style="margin-top:8px">Aaimalai, Pollachi<br>Tamil Nadu, India</div>
+                <div class="muted" style="margin-top:8px">Anaimalai, Pollachi<br>Tamil Nadu, India</div>
             </div>
             <div style="display:flex;flex-direction:column;gap:10px;min-width:180px;">
                 <strong>Quick Links</strong>
