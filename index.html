@@ -5,6 +5,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Mindbloom Technologies — 3D SaaS Landing</title>
+
+    <!-- Dynamic favicon that adapts to dark/light mode -->
+    <link rel="icon" id="favicon" href="Mindbloomtechlogo(white).png">
+    <link rel="apple-touch-icon" id="apple-touch-icon" href="Mindbloomtechlogo(white).png">
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -52,13 +57,25 @@
         }
 
         .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-image {
+            height: 32px;
+            width: auto;
+            filter: brightness(1.1);
+        }
+
+        .logo-text {
             font-weight: 900;
             letter-spacing: 0.4px;
             font-size: 24px;
             background: var(--accent);
             background-clip: text;
             -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent
+            -webkit-text-fill-color: transparent;
         }
 
         nav a {
@@ -317,7 +334,11 @@
                 gap: 16px;
             }
 
-            .logo {
+            .logo-image {
+                height: 28px;
+            }
+
+            .logo-text {
                 font-size: 20px;
             }
 
@@ -457,7 +478,11 @@
                 padding: 16px 24px;
             }
 
-            .logo {
+            .logo-image {
+                height: 30px;
+            }
+
+            .logo-text {
                 font-size: 22px;
             }
 
@@ -876,7 +901,10 @@
 <body>
     <div class="model" id="model"></div>
     <header>
-        <div class="logo">Mindbloom Technologies<span style="color:#6ee7b7"></span></div>
+        <div class="logo">
+            <img src="Mindbloomtechlogo(white).png" alt="Mindbloom Technologies Logo" class="logo-image">
+            <span class="logo-text">Mindbloom Technologies</span>
+        </div>
         <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">☰</button>
         <nav id="mobile-nav">
             <a href="#home" onclick="closeMobileMenu()">Home</a>
@@ -1578,6 +1606,27 @@
             // Fallback: simple gradient background for low-end devices
             container.style.background = 'radial-gradient(circle at 50% 50%, rgba(96, 165, 250, 0.1) 0%, rgba(11, 16, 32, 0.8) 70%)';
         }
+
+        // Dynamic favicon based on color scheme
+        function updateFavicon() {
+            const favicon = document.getElementById('favicon');
+            const appleTouchIcon = document.getElementById('apple-touch-icon');
+            const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (isDarkMode) {
+                favicon.href = 'Mindbloomtechlogo(white).png';
+                appleTouchIcon.href = 'Mindbloomtechlogo(white).png';
+            } else {
+                favicon.href = 'Mindbloomtechlogo(violet).png';
+                appleTouchIcon.href = 'Mindbloomtechlogo(violet).png';
+            }
+        }
+
+        // Update favicon on page load
+        updateFavicon();
+
+        // Listen for color scheme changes
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateFavicon);
 
         // Mobile menu functionality - make global for HTML onclick handlers
         window.toggleMobileMenu = function () {
