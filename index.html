@@ -162,13 +162,63 @@
             flex-direction: column
         }
 
-        .testimonial-grid,
-        .team-grid {
+        .testimonial-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 28px;
             margin-top: 36px;
             width: 100%;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 32px;
+            margin-top: 48px;
+            width: 100%;
+        }
+
+        .team-grid .card {
+            padding: 48px 36px;
+            text-align: center;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .team-grid .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--accent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .team-grid .card:hover::before {
+            opacity: 1;
+        }
+
+        .team-grid .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+            background: var(--accent);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .team-grid .card p {
+            font-size: 1.1rem;
+            color: var(--muted);
+            margin: 0;
         }
 
         .service-grid {
@@ -231,8 +281,7 @@
             font-size: 14px
         }
 
-        .about-grid,
-        .team-grid {
+        .about-grid {
             display: flex;
             gap: 40px;
             align-items: center
@@ -351,10 +400,27 @@
                 padding: 24px 20px;
             }
 
-            .testimonial-grid,
-            .team-grid {
+            .testimonial-grid {
                 grid-template-columns: 1fr;
                 gap: 20px;
+            }
+
+            .team-grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+
+            .team-grid .card {
+                padding: 36px 28px;
+                min-height: 160px;
+            }
+
+            .team-grid .card h3 {
+                font-size: 1.3rem;
+            }
+
+            .team-grid .card p {
+                font-size: 1rem;
             }
 
             .pricing-grid {
@@ -431,7 +497,12 @@
 
             .team-grid {
                 grid-template-columns: repeat(2, 1fr);
-                gap: 24px;
+                gap: 28px;
+            }
+
+            .team-grid .card {
+                padding: 40px 32px;
+                min-height: 180px;
             }
 
             .about-grid {
@@ -490,6 +561,7 @@
 
             .team-grid {
                 grid-template-columns: repeat(2, 1fr);
+                gap: 30px;
             }
         }
 
@@ -509,6 +581,7 @@
 
             .team-grid {
                 grid-template-columns: repeat(4, 1fr);
+                gap: 32px;
             }
         }
 
@@ -1247,7 +1320,7 @@
                 <h2 style="margin-top:6px">Engineers and innovators behind Mindbloom</h2>
                 <div class="team-grid">
                     <div class="card">
-                        <h3>Jane Doe</h3>
+                        <h3></h3>
                         <p class="muted">CEO & Co-founder</p>
                     </div>
                     <div class="card">
@@ -1408,7 +1481,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.32/dist/lenis.min.js"></script>
+
     <script type="importmap">
         {
             "imports": {
@@ -1424,14 +1497,8 @@
             (navigator.deviceMemory && navigator.deviceMemory < 4) ||
             /Android.*Chrome\/[0-5]/.test(navigator.userAgent);
 
-        const lenis = new Lenis({
-            duration: window.innerWidth < 768 ? 0.8 : 1.1,
-            easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t))
-        });
-        function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
-        requestAnimationFrame(raf);
+        // Use native smooth scrolling instead of Lenis for better performance
         gsap.registerPlugin(ScrollTrigger);
-        lenis.on('scroll', ScrollTrigger.update);
 
         const container = document.getElementById('model');
 
@@ -1506,7 +1573,15 @@
                 renderer.render(scene, camera);
             }
 
-            ScrollTrigger.create({ start: 0, end: 'max', onUpdate: self => { scrollProgress = self.progress; } });
+            // Use throttled scroll listener instead of ScrollTrigger for 3D scene
+            let scrollTimeout;
+            window.addEventListener('scroll', () => {
+                if (scrollTimeout) return;
+                scrollTimeout = setTimeout(() => {
+                    scrollProgress = window.pageYOffset / (document.documentElement.scrollHeight - window.innerHeight);
+                    scrollTimeout = null;
+                }, 16); // ~60fps
+            }, { passive: true });
             animate();
         } else {
             // Fallback: simple gradient background for low-end devices
