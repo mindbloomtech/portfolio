@@ -1492,29 +1492,27 @@
     <script type="module">
         import * as THREE from 'three';
 
-        // Performance check - disable 3D on very low-end devices
-        const isLowEndDevice = navigator.hardwareConcurrency < 4 ||
-            (navigator.deviceMemory && navigator.deviceMemory < 4) ||
-            /Android.*Chrome\/[0-5]/.test(navigator.userAgent);
+        // Full graphics enabled for all devices
+        const isLowEndDevice = false;
 
         // Use native smooth scrolling instead of Lenis for better performance
         gsap.registerPlugin(ScrollTrigger);
 
         const container = document.getElementById('model');
 
-        // Only initialize 3D scene if device can handle it
-        if (!isLowEndDevice && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        // Initialize 3D scene for all devices (only skip if user prefers reduced motion)
+        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
             const scene = new THREE.Scene();
             const camera = new THREE.PerspectiveCamera(45, innerWidth / innerHeight, 0.1, 1000);
             camera.position.set(0, 0, 6);
 
             const renderer = new THREE.WebGLRenderer({
-                antialias: window.innerWidth > 768,
+                antialias: true,
                 alpha: true,
                 powerPreference: "high-performance"
             });
             renderer.setSize(innerWidth, innerHeight);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
             renderer.outputColorSpace = THREE.SRGBColorSpace;
             container.appendChild(renderer.domElement);
 
@@ -1522,7 +1520,7 @@
             const dir = new THREE.DirectionalLight(0xffffff, 0.8); dir.position.set(5, 5, 5); scene.add(dir);
             const hemi = new THREE.HemisphereLight(0x6eebc0, 0x10203a, 0.2); scene.add(hemi);
 
-            const orbGeo = new THREE.IcosahedronGeometry(1.6, window.innerWidth < 768 ? 2 : 3);
+            const orbGeo = new THREE.IcosahedronGeometry(1.6, 4);
             const orbMat = new THREE.MeshStandardMaterial({
                 color: 0x60a5fa,
                 metalness: 0.9,
@@ -1533,7 +1531,7 @@
             const orb = new THREE.Mesh(orbGeo, orbMat);
             scene.add(orb);
 
-            const particleCount = window.innerWidth < 768 ? 1000 : 2000;
+            const particleCount = 3000;
             const particlesGeo = new THREE.BufferGeometry();
             const positions = new Float32Array(particleCount * 3);
             for (let i = 0; i < particleCount * 3; i++) positions[i] = (Math.random() - 0.5) * 15;
@@ -1549,27 +1547,20 @@
                     camera.aspect = innerWidth / innerHeight;
                     camera.updateProjectionMatrix();
                     renderer.setSize(innerWidth, innerHeight);
-                    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+                    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
                 }, 100);
             });
 
             let t1 = 0;
             let scrollProgress = 0;
-            let frameCount = 0;
 
             function animate() {
                 requestAnimationFrame(animate);
-                frameCount++;
-
-                // Reduce animation frequency on mobile
-                const skipFrames = window.innerWidth < 768 ? 2 : 1;
-                if (frameCount % skipFrames !== 0) return;
-
                 t1 += 0.01;
                 orb.position.y = Math.sin(t1) * 0.12;
-                orb.rotation.x += 0.002 + scrollProgress * 0.01;
-                orb.rotation.y += 0.004 + scrollProgress * 0.015;
-                particles.rotation.y += 0.0005;
+                orb.rotation.x += 0.002 + scrollProgress * 0.02;
+                orb.rotation.y += 0.004 + scrollProgress * 0.03;
+                particles.rotation.y += 0.001;
                 renderer.render(scene, camera);
             }
 
