@@ -25,11 +25,6 @@
       "dest": "/index.html"
     }
   ],
-  "functions": {
-    "api/**/*.js": {
-      "maxDuration": 10
-    }
-  },
   "env": {
     "SMTP_HOST": "@smtp_host",
     "SMTP_PORT": "@smtp_port",
