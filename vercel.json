@@ -17,16 +17,6 @@
       "destination": "/index.html"
     }
   ],
-  "env": {
-    "SMTP_HOST": "@smtp_host",
-    "SMTP_PORT": "@smtp_port",
-    "SMTP_SECURE": "@smtp_secure",
-    "SMTP_USER": "@smtp_user",
-    "SMTP_PASS": "@smtp_pass",
-    "SMTP_FROM_EMAIL": "@smtp_from_email",
-    "COMPANY_EMAIL": "@company_email",
-    "ALLOWED_ORIGINS": "@allowed_origins"
-  },
   "headers": [
     {
       "source": "/api/(.*)",
