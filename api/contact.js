@@ -17,7 +17,7 @@ setInterval(() => {
 function checkRateLimit(ip) {
   const now = Date.now();
   const key = ip;
-
+  
   if (!rateLimitStore.has(key)) {
     rateLimitStore.set(key, {
       count: 1,
@@ -25,9 +25,9 @@ function checkRateLimit(ip) {
     });
     return { allowed: true, remaining: 4 };
   }
-
+  
   const data = rateLimitStore.get(key);
-
+  
   // Reset if 15 minutes have passed
   if (now - data.resetTime > 15 * 60 * 1000) {
     rateLimitStore.set(key, {
@@ -36,16 +36,16 @@ function checkRateLimit(ip) {
     });
     return { allowed: true, remaining: 4 };
   }
-
+  
   // Check if limit exceeded
   if (data.count >= 5) {
-    return {
-      allowed: false,
+    return { 
+      allowed: false, 
       remaining: 0,
       resetTime: data.resetTime + (15 * 60 * 1000)
     };
   }
-
+  
   // Increment count
   data.count++;
   return { allowed: true, remaining: 5 - data.count };
@@ -99,6 +99,18 @@ module.exports = async function handler(req, res) {
   }
 
   try {
+    // Rate limiting
+    const clientIP = req.headers['x-forwarded-for'] || req.connection.remoteAddress || 'unknown';
+    const rateLimit = checkRateLimit(clientIP);
+    
+    if (!rateLimit.allowed) {
+      return res.status(429).json({
+        success: false,
+        error: 'Too many requests. Please try again later.',
+        resetTime: rateLimit.resetTime
+      });
+    }
+
     const { name, email, company, message, phone } = req.body;
 
     // Sanitize inputs
@@ -132,18 +144,6 @@ module.exports = async function handler(req, res) {
       });
     }
 
-    // For now, just log the contact form submission
-    console.log('Contact form submission:', sanitizedData);
-
-    // Check if SMTP is configured
-    if (!process.env.SMTP_HOST || !process.env.SMTP_USER || !process.env.SMTP_PASS) {
-      return res.status(200).json({
-        success: true,
-        message: 'Message received successfully! (SMTP not configured - check server logs)'
-      });
-    }
-
-    // If SMTP is configured, send emails
     const transporter = createTransporter();
 
     // Email to company
@@ -175,13 +175,55 @@ module.exports = async function handler(req, res) {
           <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; color: #666; font-size: 12px;">
             <p>This email was sent from the Mindbloom Technologies contact form.</p>
             <p>Timestamp: ${new Date().toLocaleString()}</p>
+            <p>IP Address: ${clientIP}</p>
           </div>
         </div>
       `
     };
 
-    // Send email
-    await transporter.sendMail(companyMailOptions);
+    // Auto-reply to customer
+    const customerMailOptions = {
+      from: `"Mindbloom Technologies" <${process.env.SMTP_FROM_EMAIL}>`,
+      to: sanitizedData.email,
+      subject: 'Thank you for contacting Mindbloom Technologies',
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <div style="text-align: center; padding: 20px; background: linear-gradient(90deg, #6ee7b7, #60a5fa); border-radius: 8px 8px 0 0;">
+            <h1 style="color: white; margin: 0;">Mindbloom Technologies</h1>
+          </div>
+          
+          <div style="padding: 30px; background: white; border-radius: 0 0 8px 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+            <h2 style="color: #0b1020;">Thank you for reaching out, ${sanitizedData.name}!</h2>
+            
+            <p>We've received your message and appreciate you taking the time to contact us. Our team will review your inquiry and get back to you within 24 hours.</p>
+            
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
+              <h3 style="color: #0b1020; margin-top: 0;">Your Message:</h3>
+              <p style="margin-bottom: 0;">${sanitizedData.message.replace(/\n/g, '<br>')}</p>
+            </div>
+            
+            <p>In the meantime, feel free to explore our services and learn more about how we can help transform your business with cutting-edge technology solutions.</p>
+            
+            <div style="text-align: center; margin: 30px 0;">
+              <a href="https://mindbloomtech.in" style="background: linear-gradient(90deg, #6ee7b7, #60a5fa); color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold;">Visit Our Website</a>
+            </div>
+            
+            <div style="border-top: 1px solid #eee; padding-top: 20px; margin-top: 30px; color: #666; font-size: 14px;">
+              <p><strong>Mindbloom Technologies</strong><br>
+              Email: inquiry@mindbloomtech.in<br>
+              Phone: +91-987654321<br>
+              Location: Pollachi, Tamil Nadu, India</p>
+            </div>
+          </div>
+        </div>
+      `
+    };
+
+    // Send emails
+    await Promise.all([
+      transporter.sendMail(companyMailOptions),
+      transporter.sendMail(customerMailOptions)
+    ]);
 
     res.status(200).json({
       success: true,

@@ -1,5 +1,4 @@
 // SMTP Contact Form Handler
-if (typeof SMTPContactForm === 'undefined') {
 class SMTPContactForm {
     constructor(formId, options = {}) {
         this.form = document.getElementById(formId);
@@ -247,5 +246,3 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }, 100);
 });
-
-} // End of SMTPContactForm check
